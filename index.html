@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Romantic Birthday Surprise</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: linear-gradient(to bottom, #ff69b4, #ffb6c1);
+            }
+            .page {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            .page.active {
+                display: flex;
+            }
+            .balloon {
+                font-size: 4em;
+                animation: float 3s ease-in-out infinite;
+                position: absolute;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-20px); }
+            }
+            button {
+                padding: 15px 30px;
+                font-size: 1.5em;
+                background: #ff1493;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+            button:hover {
+                background: #ff69b4;
+            }
+            #slideshow img {
+                width: 80%;
+                max-width: 500px;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                display: none; /* Hide all by default */
+            }
+            #slideshow img.active {
+                display: block; /* Show only active slide */
+            }
+            #paragraph {
+                max-width: 900px;
+                margin: 40px auto;
+                padding: 40px 35px;
+                background: 
+                    repeating-linear-gradient(
+                         to bottom,
+                         #fdf6e3 0px,
+                         #fdf6e3 28px,
+                         #e6dcc6 29px
+                    );
+                    border: 1px solid #d6c9a8;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+                    font-family: "Georgia", "Times New Roman", serif;
+                    color: #4b3b2a;
+            }
+
+            #paragraph p {
+                font-size: 20px;
+                line-height: 30px;
+                margin-bottom: 20px;
+            }
+            #paragraph p:first-child {
+                font-weight: bold;
+                font-size: 28px;
+            }
+
+            video {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: -1;
+            }
+            /* Hearts animation */
+            .heart {
+                position: absolute;
+                color: pink;
+                font-size: 24px;
+                animation: fly 6s linear infinite;
+                opacity: 0.8;
+            }
+
+            @keyframes fly {
+                0% {
+                    transform: translateY(100vh) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-10vh) scale(1.5);
+                    opacity: 0;
+                }
+            }
+
+            /* Gift box */
+            #giftBox {
+                font-size: 120px;
+                cursor: pointer;
+                animation: bounce 1.5s infinite;
+            }
+
+            @keyframes bounce {
+                0%,100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+
+            /* Surprise flash */
+            .surprise {
+                animation: flash 0.5s ease-in-out 4;
+            }
+
+            @keyframes flash {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.3); }
+                100% { transform: scale(1); }
+            }
+
+            /* Heart and flower rain */
+            
+            body {
+                margin: 0;
+                height: 100vh;
+                overflow: hidden;
+                background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+                font-family: Arial, sans-serif;
+            }
+            
+            .rain-item {
+                position: absolute;
+                top: -50px;
+                font-size: 30px;
+                animation: fall linear infinite;
+                opacity: 0.8;
+                z-index: 5;   /* ✅ ADD THIS */
+                pointer-events: none;
+            }
+
+            @keyframes fall {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(110vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+
+
+            #nextBtn1 {
+                font-style: italic;
+                font-family: Arial, sans-serif; /* normal font */
+            }
+
+            /* Fullscreen butterfly container */
+            #butterflies {
+                position: fixed;      /* FULL SCREEN */
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 2;           /* above video (-1) but below text (#paragraph z-index:3) */
+            }
+
+            /* Butterfly animation */
+            .butterfly {
+                position: absolute;   /* absolute inside container */
+                font-size: 24px;
+                opacity: 0.8;
+                animation-name: butterflyFly;
+                animation-timing-function: linear;
+                animation-iteration-count: 1;
+            }
+
+            @keyframes butterflyFly {
+                0% {
+                    transform: translateY(0) rotate(0deg) scale(0.5);
+                    opacity: 0;
+                }
+                20% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-120vh) rotate(360deg) scale(1);
+                    opacity: 0;
+                }
+            }
+
+
+
+
+        </style>
+    </head>
+    <body>
+        <!-- Page 1: Welcome -->
+        <div id="page1" class="page">
+
+            <video class="bg-video" autoplay muted loop playsinline>
+                <source src="./video/bg1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <div class="balloon" style="top: 10%; left: 20%;">🎈</div>
+            <div class="balloon" style="top: 20%; right: 15%;">🎈</div>
+            <div class="balloon" style="top: 50%; left: 10%;">🎈</div>
+            <div class="balloon" style="top: 70%; right: 20%;">🎈</div>
+            <h1 style="color: rgb(173, 112, 201); font-size: 3em; font-style: italic; font-family: 'Georgia', cursive;">Welcome to Your Birthday Surprise! 💖</h1>
+
+            <script>
+                window.addEventListener("load", () => {
+                    setTimeout(() => {
+                        document.getElementById("nextBtn1").style.display = "inline-block";
+                    }, 5000); // 5 seconds
+                });
+            </script>
+
+            <button id="nextBtn1" onclick="window.location.href='heart.html'">
+                 Let's Celebrate!🎉
+            </button>
+
+
+
+            <!-- <button id="nextBtn1" onclick="nextPage(15)">Next</button> -->
+        </div>
+
+        <!-- Page 1.5: Gift Surprise -->
+        <div id="page15" class="page">
+
+            <!-- Flying hearts -->
+            <div id="hearts"></div>
+
+            <!-- Gift box -->
+            <div id="giftBox" onclick="openGift()">🎁</div>
+
+            <h2 style="color:rgb(111, 41, 177);">Tap the Gift 💝</h2>
+
+            <!-- <button id="nextBtn1" onclick="nextPage(2)">Next</button> -->
+        </div>
+
+
+        <!-- Page 2: Slideshow -->
+        <div id="page2" class="page">
+
+            
+            <audio id="page2Music" loop>
+    <source src="./Song/audio.mp3" type="audio/mpeg">
+</audio>
+
+
+
+            <div id="slideshow">
+                <img src="./image/0.jpeg" class="active">
+                <img src="./image/1.jpeg">
+                <img src="./image/2.jpeg">
+                <img src="./image/3.jpeg">
+                <img src="./image/4.jpeg">
+                <img src="./image/5.jpeg">
+                <img src="./image/6.jpeg">
+                <img src="./image/7.jpeg">
+                <img src="./image/8.jpeg">
+                <img src="./image/9.jpeg">
+                <img src="./image/10.jpeg">
+            </div>
+
+    
+            <button id="nextBtn" style="display: none;" onclick="nextPage(3)">One more💖..</button>
+        </div>
+
+
+        <!-- Page 3: Love Paragraph with Video -->
+        <div id="page3" class="page">
+             <video autoplay muted loop>
+                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4">
+            </video>
+
+
+              <div id="butterflies"></div>
+
+            <div id="paragraph">
+                <p>Happiieeeessttt Birthdayyyy, Meraaaaaaaaaaa pyraaaaaaaaaaaaa bachaaaaaaaaaaaaaaaaa  🎂💕</p>
+                <p>Tum meree zindgii kee sbseee khubsuratt khanii hoo, jesssee hum roj pdhnaa cahnteee haiii. Humm aapseee pyarrrrrr krteeee haiiii bohotttt pyarrrrr krteeee haiii orr yee pyarrr kbhiii khtm niiii  hogaaaaaaaaaaaaa humessaaa sirfff aapkeee liyeee hii hogaaaaa.</p>
+                <p>Hummkoo orr bhiii bohotttt kuchhh bolnnaa haiii prrr voo aapseee mil krr hii bolengeee too appp bsss milnee kaa thodaaa saa itzarrr kariyeee humaraaaa…….. orrr firr see humareeeee pyariiiiiiiiiii seeeeeeeee humareeeeee dil ke raniiii koooo humareeeee future partnerrr koooo humareee sanamm kooo happpiiiieeesstttt birthdayyyyyy mereeeeeeeeee jaaaaan  😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘😘🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿🧿♾️♾️♾️♾️♾️♾️♾️♾️♾️♾️♾️♾️♾️♾️💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖</p>
+            </div>
+        </div>
+
+        <script>
+            let currentPage = 1;
+            let slideIndex = 0;
+            let slides;
+
+            /* ---------- PAGE LOAD HANDLING ---------- */
+           window.addEventListener("DOMContentLoaded", () => {
+                slides = document.querySelectorAll('#slideshow img');
+                const hash = window.location.hash || "#page1";
+
+                document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+
+                if (hash === "#page2") {
+                    document.getElementById("page2").classList.add("active");
+                    currentPage = 2;
+                    startSlideshow();
+                    startRain();        // ✅ START RAIN
+                    playPage2Music();   // ✅ START MUSIC
+                } else {
+                    document.getElementById("page1").classList.add("active");
+                    currentPage = 1;
+                }
+            });
+
+
+            /* ---------- PAGE NAVIGATION ---------- 
+            function nextPage(page) {
+                document.getElementById(`page${currentPage}`).classList.remove("active");
+                document.getElementById(`page${page}`).classList.add("active");
+                currentPage = page;
+            
+                if (page === 2) {
+                    startSlideshow();
+                }
+                if (page === 15) {
+                    startHearts();
+                }
+            } */
+
+            /* ---------- SLIDESHOW ---------- */
+            function startSlideshow() {
+                if (!slides || slides.length === 0) return;
+            
+                slideIndex = 0;
+                slides.forEach(img => img.classList.remove('active'));
+                slides[slideIndex].classList.add('active');
+            
+                const interval = setInterval(() => {
+                    slides[slideIndex].classList.remove('active');
+                    slideIndex++;
+                
+                    if (slideIndex < slides.length) {
+                        slides[slideIndex].classList.add('active');
+                    } else {
+                        clearInterval(interval);
+                        const btn = document.getElementById('nextBtn');
+                        if (btn) btn.style.display = 'block';
+                    }
+                }, 2000);
+            }
+
+            /* ---------- BACKGROUND AUDIO---------- */
+            const page2Music = document.getElementById("page2Music");
+
+           function playPage2Music() {
+                page2Music.volume = 0.8;
+                page2Music.play().catch(() => {
+                    console.log("Audio blocked until user interaction");
+                });
+            }
+
+            function stopPage2Music() {
+                page2Music.pause();
+                page2Music.currentTime = 0;
+            }   
+            
+            function nextPage(page) {
+                document.getElementById(`page${currentPage}`).classList.remove("active");
+                document.getElementById(`page${page}`).classList.add("active");
+
+                // Leaving page 2
+                if (currentPage === 2) {
+                    stopRain();
+                    stopPage2Music();
+                }
+            
+                // Leaving page 3
+                if (currentPage === 3) {
+                    stopButterflies();
+                }
+            
+                currentPage = page;
+            
+                // Page 2
+                if (page === 2) {
+                    startSlideshow();
+                    startRain();
+                    playPage2Music();
+                }
+            
+                // Page 3
+                if (page === 3) {
+                    stopRain();
+                    startButterflies();   // 🦋 START HERE
+                }
+            }
+
+
+
+
+            /* ---------- Heart and flower rain ---------- */
+            const symbols = ["❤️", "🌸", "💖", "🌹", "💕"];
+            let rainInterval = null;
+
+            function createRain() {
+                const item = document.createElement("div");
+                item.classList.add("rain-item");
+            
+                item.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                item.style.left = Math.random() * window.innerWidth + "px";
+                item.style.fontSize = Math.random() * 20 + 20 + "px";
+                item.style.animationDuration = Math.random() * 3 + 3 + "s";
+            
+                document.body.appendChild(item);
+            
+                setTimeout(() => {
+                    item.remove();
+                }, 6000);
+            }
+
+            // start rain
+            function startRain() {
+                rainInterval = setInterval(createRain, 300);
+            }
+
+            // stop rain
+            function stopRain() {
+                clearInterval(rainInterval);
+                rainInterval = null;
+            
+                // remove existing rain items
+                document.querySelectorAll(".rain-item").forEach(el => el.remove());
+            }
+
+             
+
+            function showPage3() {
+                document.getElementById("page3").style.display = "block";
+                stopRain(); // ⬅️ rain stops here
+            }
+
+            /* ---------- HEARTS ---------- */
+            function startHearts() {
+                const heartContainer = document.getElementById("hearts");
+                if (!heartContainer) return;
+            
+                heartContainer.innerHTML = "";
+            
+                for (let i = 0; i < 20; i++) {
+                    const heart = document.createElement("div");
+                    heart.className = "heart";
+                    heart.innerHTML = "❤️";
+                    heart.style.left = Math.random() * 100 + "vw";
+                    heart.style.animationDelay = Math.random() * 5 + "s";
+                    heartContainer.appendChild(heart);
+                }
+            }
+
+            /* ---------- GIFT OPEN ---------- */
+            function openGift() {
+                const gift = document.getElementById("giftBox");
+                if (!gift) return;
+            
+                gift.classList.add("surprise");
+            
+                setTimeout(() => {
+                    nextPage(2);
+                }, 2000);
+            }
+
+            function createButterfly() {
+                const butterfly = document.createElement("div");
+                butterfly.className = "butterfly";
+                butterfly.innerHTML = "🦋";
+
+                const container = document.getElementById("butterflies");
+
+                // Random horizontal position
+                const x = Math.random() * window.innerWidth;
+                butterfly.style.left = x + "px";
+
+                // Start below screen
+                butterfly.style.bottom = "-50px";
+
+                // Random size
+                const size = 20 + Math.random() * 30;
+                butterfly.style.fontSize = size + "px";
+
+                // Random animation duration
+                const duration = 6 + Math.random() * 6;
+                butterfly.style.animationDuration = duration + "s";
+
+                container.appendChild(butterfly);
+
+                // Remove butterfly after animation
+                setTimeout(() => {
+                    butterfly.remove();
+                }, duration * 1000);
+            }
+
+            // Interval for multiple butterflies
+            let butterflyInterval = null;
+
+            function startButterflies() {
+                if (butterflyInterval) return;
+                butterflyInterval = setInterval(createButterfly, 300); // every 0.3s
+            }
+
+            function stopButterflies() {
+                clearInterval(butterflyInterval);
+                butterflyInterval = null;
+                document.getElementById("butterflies").innerHTML = "";
+            }
+
+
+
+        </script>
+
+
+    </body>
+</html>

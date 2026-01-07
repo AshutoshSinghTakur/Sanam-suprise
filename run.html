@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Romantic Heavy Pull Animation</title>
+    
+        <style>
+            body{
+                margin:0;
+                height:100vh;
+                background: linear-gradient(135deg,#e2c1e9,#fad0c4);
+                overflow:hidden;
+            }
+        
+            /* ================= BOY ================= */
+            .boy{
+                position:absolute;
+                top:50%;
+                left:-160px;
+                width:120px;
+                height:230px;
+                transform:translateY(-50%) scale(0.75);
+                transition:left 10s linear; /* 1 km/hr FEEL */
+            }
+        
+            /* HEAD */
+            .head{
+                width:50px;
+                height:50px;
+                background:#ffccbc;
+                border-radius:50%;
+                margin:auto;
+            }
+        
+            /* BODY */
+            .body{
+                width:60px;
+                height:80px;
+                background:#4a148c;
+                border-radius:18px;
+                margin:5px auto;
+            }
+        
+            /* ARMS */
+            .arms{
+                position:absolute;
+                top:65px;
+                width:100%;
+            }
+            .arm{
+                width:16px;
+                height:75px;
+                background:#ffab91;
+                position:absolute;
+                transform-origin:top center;
+            }
+            .arm.left{ left:18px; }
+            .arm.right{ right:18px; }
+        
+            /* LEGS */
+            .legs{
+                position:absolute;
+                bottom:0;
+                width:100%;
+            }
+            .leg{
+                width:18px;
+                height:95px;
+                background:#263238;
+                position:absolute;
+                transform-origin:top center;
+            }
+            .leg.left{ left:40px; }
+            .leg.right{ right:40px; }
+        
+            /* ================= HI WAVE ================= */
+            .wave .arm.right{
+                animation: hiWave 1.4s ease-in-out infinite;
+            }
+            @keyframes hiWave{
+                0%{ transform:rotate(-10deg); }
+                50%{ transform:rotate(-75deg) translateY(-12px); }
+                100%{ transform:rotate(-10deg); }
+            }
+        
+            /* ================= RUN FAST ================= */
+            .run{
+                transition:left 3s linear; /* 3 km/hr FEEL */
+            }
+            .run .leg.left{
+                animation: runLeg 0.4s infinite alternate;
+            }
+            .run .leg.right{
+                animation: runLeg 0.4s infinite alternate-reverse;
+            }
+            @keyframes runLeg{
+                from{ transform:rotate(20deg); }
+                to{ transform:rotate(-25deg); }
+            }
+        
+            /* ================= HEAVY PULL ================= */
+            .pull{
+                transform:translateY(-50%) scale(0.75) skewX(-10deg);
+                transition:left 10s linear; /* 1 km/hr BACKWARD */
+            }
+            .pull .arm.left,
+            .pull .arm.right{
+                animation: pullArm 1.6s infinite ease-in-out;
+            }
+            .pull .leg.left{
+                animation: pullLeg 1.6s infinite ease-in-out;
+            }
+        
+            @keyframes pullArm{
+                0%{ transform:rotate(-25deg); }
+                50%{ transform:rotate(-60deg); }
+                100%{ transform:rotate(-25deg); }
+            }
+            @keyframes pullLeg{
+                0%{ transform:rotate(10deg); }
+                50%{ transform:rotate(-20deg); }
+                100%{ transform:rotate(10deg); }
+            }
+        
+            /* ================= ROPE ================= */
+            .rope{
+                position:absolute;
+                top:50%;
+                left:100%;
+                height:4px;
+                width:0;
+                background:#6d4c41;
+                transform:translateY(-50%);
+                transition:width 10s linear;
+            }
+        
+            /* ================= TEXT ================= */
+            .love-text{
+                position:absolute;
+                top:40%;
+                right:-900px;
+                font-size:72px;
+                font-family:'Brush Script MT', cursive;
+                color:#d81b60;
+                transition:right 10s linear;
+            }
+        
+            /* ================= BUTTON ================= */
+            .next-btn{
+                position:absolute;
+                bottom:40px;
+                left:50%;
+                transform:translateX(-50%);
+                padding:14px 40px;
+                font-size:20px;
+                border:none;
+                border-radius:30px;
+                background:linear-gradient(45deg,#ff4081,#f50057);
+                color:white;
+                opacity:0;
+                transition:opacity 1.5s ease;
+                cursor:pointer;
+
+                
+
+            }
+            
+
+
+            .show{ opacity:1; }
+        
+        </style>
+    </head>
+    
+    <body>
+    
+        <!-- BOY -->
+        <div class="boy" id="boy">
+            <div class="head"></div>
+            <div class="body"></div>
+        
+            <div class="arms">
+                <div class="arm left"></div>
+                <div class="arm right"></div>
+            </div>
+        
+            <div class="legs">
+                <div class="leg left"></div>
+                <div class="leg right"></div>
+            </div>
+        
+            <div class="rope" id="rope"></div>
+        </div>
+    
+        <!-- TEXT -->
+        <div class="love-text" id="loveText">I Loveeee Youuuuu Pyariiiii ♾️💝</div>
+    
+        <!-- BUTTON -->
+        <!--<button class="next-btn" id="nextBtn">Next 💖</button> -->
+
+        <!-- BUTTON -->
+        <button class="next-btn" id="nextBtn" onclick="goNextPage()">More suprise are waiting 💖</button>
+
+        <script>
+            function goNextPage() {
+                window.location.href = "index.html#page2";
+            }
+        </script>
+
+        <!-- TOP CENTER ROMANTIC TEXT -->
+        <div class="top-romantic-text" id="topText">Wait a second madam jiii 💖</div>
+
+        <style>
+            .top-romantic-text {
+                position: absolute;
+                top: 30px; /* distance from top */
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                font-size: 50px;
+                font-family: 'Brush Script MT', cursive; /* romantic font */
+                color: #ff0066;
+                text-shadow: 
+                    2px 2px 8px rgba(255,0,102,0.5),
+                    0 0 15px rgba(255,0,102,0.3);
+                opacity: 0;
+                animation: fadeInDown 2s ease forwards;
+            }
+
+            /* fade in from top */
+            @keyframes fadeInDown {
+                0% {
+                    transform: translate(-50%, -50px);
+                    opacity: 0;
+                }
+                100% {
+                    transform: translateX(-50%);
+                    opacity: 1;
+                }
+            }
+
+            body {
+                margin: 0;
+                overflow: hidden;
+                background: linear-gradient(120deg, #b274c2, #fad0c4);
+            }           
+
+            /* Floating hearts */
+            .heart {
+                position: absolute;
+                color: rgba(255, 0, 100, 0.6);
+                font-size: 20px;
+                animation: floatUp 6s linear infinite;
+                pointer-events: none;
+            }
+
+            @keyframes floatUp {
+                from {
+                    transform: translateY(100vh) scale(1);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateY(-10vh) scale(1.4);
+                    opacity: 0;
+                }
+            }
+
+        </style>
+
+    
+        <script>
+            const boy = document.getElementById("boy");
+            const text = document.getElementById("loveText");
+            const rope = document.getElementById("rope");
+            const btn = document.getElementById("nextBtn");
+        
+            /* 1️⃣ ENTER SLOWLY (1 km/hr) */
+            setTimeout(()=>{
+                boy.style.left="35%";
+                boy.classList.add("wave");
+            },500);
+        
+            /* 2️⃣ STOP + HI */
+            setTimeout(()=>{
+                boy.classList.remove("wave");
+            },12000);
+        
+            /* 3️⃣ RUN FAST RIGHT (3 km/hr) */
+            setTimeout(()=>{
+                boy.classList.add("run");
+                boy.style.left="65%";
+            },13000);
+        
+            /* 4️⃣ START PULL */
+          /*  setTimeout(()=>{
+                boy.classList.remove("run");
+                boy.classList.add("pull");
+                rope.style.width="260px";
+            },17000); */
+        
+            /* 5️⃣ HEAVY TEXT PULL (1 km/hr) */
+            setTimeout(()=>{
+                text.style.right="20%";
+                boy.style.left="10%"; // backward movement
+
+            },17500);
+        
+            /* 6️⃣ FINISH */
+            setTimeout(()=>{
+                btn.classList.add("show");
+            },28000);
+        
+            setTimeout(()=>{
+                boy.classList.remove("pull");   // remove pulling motion
+                boy.classList.add("stop");      // freeze arms & legs
+                btn.classList.add("show");      // show Next button
+            }, 27500);  // same time text finishes moving
+
+            
+            // check position continuously
+            const checkPosition = setInterval(() => {
+                const boyLeft = boy.getBoundingClientRect().left;
+            
+                if (boyLeft <= 10) { // reached left side
+                    setTimeout(()=>{
+                        boy.classList.remove("run");
+                        boy.classList.add("pull");
+                        rope.style.width="260px";
+                    },17000);
+                    
+                
+                    rope.style.width = "0px";   // rope disappears
+                    rope.style.opacity = "0";   // optional fade
+                
+                    clearInterval(checkPosition);
+                }
+            }, 50);
+
+            setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤";
+
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = Math.random() * 20 + 15 + "px";
+                heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 7000);
+            }, 300);
+        
+        </script>
+    
+    </body>
+</html>

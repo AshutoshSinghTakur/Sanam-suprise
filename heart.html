@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heart Tree</title>
+<style>
+  body {
+    margin:0;
+    font-family: "Segoe UI", sans-serif;
+    background:#0b0b0b;
+    overflow:hidden;
+    color:white;
+  }
+
+  canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end; /* move content to right */
+  align-items: center;
+  height: 100vh;
+  padding: 0 6vw;
+  pointer-events: none;
+}
+
+
+  .left-text {
+    max-width: 40%;
+    font-size: 2rem;
+    line-height: 1.4;
+    color: #ffd6e5;
+  }
+
+  .right-btn {
+    pointer-events: auto;
+  }
+
+  .gift-btn {
+    padding: 16px 32px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ff8fab, #ffc2d1);
+    color: #4b1022;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255,140,180,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .gift-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(255,140,180,0.6);
+  }
+
+  /* ===== TEXT ANIMATION ===== */
+.animated-text {
+  position: absolute;
+  left: 6vw;
+  top: 30%;
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: textIn 2s ease forwards;
+  animation-delay: 1.5s;
+}
+
+.animated-text h1 {
+  font-size: 3rem;
+  background: linear-gradient(90deg, #ffafcc, #ffc8dd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 2s infinite alternate;
+}
+
+.animated-text p {
+  font-size: 1.4rem;
+  color: #ffd6e5;
+  margin-top: 10px;
+}
+
+@keyframes textIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px rgba(255,175,204,0.4); }
+  to   { text-shadow: 0 0 25px rgba(255,175,204,0.9); }
+}
+
+/* ===== BUTTON DELAY ===== */
+.right-btn {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.8s ease;
+}
+
+.right-btn.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="overlay">
+ 
+  <div class="right-btn">
+    <button class="gift-btn" onclick="goGift()">Next to 🎁</button>
+  </div>
+</div>
+
+<div class="animated-text">
+  <h1>For You</h1>
+  <p>Myy big speciall heartt</p>
+  <p>Maharaniiii Jiii❤️</p>
+</div>
+
+
+<script>
+function goGift() {
+  window.location.href = "gift.html";
+}
+</script>
+
+<script>
+setTimeout(() => {
+  document.querySelector(".right-btn").classList.add("show");
+}, 5000);
+</script>
+
+
+<script>
+/* ==== HEART TREE ANIMATION CODE ==== */
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+resize();
+window.addEventListener("resize", resize);
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function heart(t) {
+  return {
+    x: 16 * Math.pow(Math.sin(t), 3),
+    y: -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t))
+  };
+}
+
+const heartPoints = [];
+function buildHeart() {
+  heartPoints.length = 0;
+  const scale = Math.min(canvas.width, canvas.height) * 0.025;
+  for (let i = 0; i < 450; i++) {
+    const t = (i / 450) * Math.PI * 2;
+    const p = heart(t);
+    heartPoints.push({
+      x: canvas.width/2 + p.x * scale,
+      y: canvas.height*0.35 + p.y * scale
+    });
+  }
+}
+
+let trunkProgress = 0;
+const maxTrunk = () => canvas.height * 0.25;
+
+const roots = [];
+let rootStartTime = null;
+const ROOT_GROW_TIME = 2000;
+
+function spawnRoots() {
+  roots.length = 0;
+  rootStartTime = performance.now();
+  const baseX = canvas.width/2;
+  const baseY = canvas.height*0.9;
+
+  for (let i = 0; i < 7; i++) {
+    const angle = Math.PI/2 + Math.random() * Math.PI/2;
+    roots.push({
+      x: baseX,
+      y: baseY,
+      angle,
+      length: 0,
+      max: 80 + Math.random()*60,
+      thickness: 4 + Math.random()*2,
+      children: []
+    });
+  }
+}
+
+const particles = [];
+
+function spawnParticles() {
+  particles.length = 0;
+  for (let i = 0; i < heartPoints.length; i++) {
+    const startX = canvas.width/2;
+    const startY = canvas.height*0.9 - trunkProgress;
+    particles.push({
+      x: startX,
+      y: startY,
+      tx: heartPoints[i].x,
+      ty: heartPoints[i].y,
+      color: `hsl(${Math.random()*360},80%,70%)`,
+      progress: 0
+    });
+  }
+}
+
+function drawHeart(x,y,size,color) {
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.scale(size,size);
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.bezierCurveTo(0,-1.5,-2,-1.5,-2,0);
+  ctx.bezierCurveTo(-2,2,0,3,0,4);
+  ctx.bezierCurveTo(0,3,2,2,2,0);
+  ctx.bezierCurveTo(2,-1.5,0,-1.5,0,0);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawRoot(root, allowGrow) {
+  if (allowGrow && root.length < root.max) root.length += 0.8;
+
+  const endX = root.x + Math.cos(root.angle) * root.length;
+  const endY = root.y + Math.sin(root.angle) * root.length;
+
+  const ctrlX = root.x + Math.cos(root.angle + (Math.random()*0.4 - 0.2)) * root.length * 0.5;
+  const ctrlY = root.y + Math.sin(root.angle + (Math.random()*0.4 - 0.2)) * root.length * 0.5;
+
+  ctx.lineWidth = root.thickness;
+  ctx.strokeStyle = "#ffb6c1";
+  ctx.beginPath();
+  ctx.moveTo(root.x, root.y);
+  ctx.quadraticCurveTo(ctrlX, ctrlY, endX, endY);
+  ctx.stroke();
+
+  if (allowGrow && root.children.length === 0 && root.length > root.max * 0.5) {
+    const n = Math.floor(Math.random()*2);
+    for (let i = 0; i < n; i++) {
+      root.children.push({
+        x: endX,
+        y: endY,
+        angle: root.angle + (Math.random()*0.6 - 0.3),
+        length: 0,
+        max: root.max * 0.5,
+        thickness: root.thickness * 0.6,
+        children: []
+      });
+    }
+  }
+
+  for (const c of root.children) drawRoot(c, allowGrow);
+}
+
+function animate(time) {
+  ctx.fillStyle = "rgba(11,11,11,0.15)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  const allowRootGrow = rootStartTime && (time - rootStartTime < ROOT_GROW_TIME);
+
+  for (const r of roots) drawRoot(r, allowRootGrow);
+
+  const baseX = canvas.width/2;
+  const baseY = canvas.height*0.9;
+
+  ctx.strokeStyle = "#ffb6c1";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(baseX, baseY);
+  ctx.lineTo(baseX, baseY - trunkProgress);
+  ctx.stroke();
+
+  if (trunkProgress < maxTrunk()) {
+    trunkProgress += 2;
+  } else if (particles.length === 0) {
+    spawnParticles();
+  }
+
+  for (const p of particles) {
+    if (p.progress < 1) p.progress += 0.01;
+    p.x += (p.tx - p.x) * p.progress;
+    p.y += (p.ty - p.y) * p.progress;
+    drawHeart(p.x, p.y, 3, p.color);
+  }
+
+  
+  requestAnimationFrame(animate);
+}
+
+
+
+buildHeart();
+spawnRoots();
+animate();
+</script>
+</body>
+</html>

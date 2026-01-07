@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Surprise</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* ⬇️ BOX POSITION */
+    .box-container {
+        position: relative;
+        top: 140px;
+        z-index: 5;
+        text-align: center;
+    }
+
+    .gift-box {
+        width: 160px;
+        height: 160px;
+        background: #e53935;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    .box-container.open .gift-box {
+        overflow: visible;
+    }
+
+    .ribbon-v, .ribbon-h {
+        position: absolute;
+        background: white;
+    }
+    .ribbon-v { width: 20px; height: 100%; left: 70px; }
+    .ribbon-h { height: 20px; width: 100%; top: 70px; }
+
+    .lid {
+        width: 170px;
+        height: 50px;
+        background: #ef5350;
+        position: absolute;
+        top: -50px;
+        left: -5px;
+        border-radius: 10px;
+        transform-origin: bottom center;
+        transition: transform 0.8s ease;
+        z-index: 6;
+    }
+
+    .open .lid {
+        transform: rotateX(120deg) translateY(-20px);
+    }
+
+    /* FLOWER ORIGIN */
+    .pop-origin {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+    }
+
+    .flower {
+        position: absolute;
+        font-size: 30px;
+        opacity: 0;
+    }
+
+    .open .flower {
+        animation: megaBlast 2.6s cubic-bezier(.15,.8,.25,1.4) forwards;
+    }
+
+    @keyframes megaBlast {
+        0% {
+            transform: translate(0,0) scale(0.2) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform:
+                translate(var(--x), var(--y))
+                scale(1)
+                rotate(var(--r));
+            opacity: 1;
+        }
+    }
+
+    /* 🎉 HAPPY BIRTHDAY TEXT */
+    .birthday-text {
+        position: absolute;
+        top: 15%;
+        width: 100%;
+        text-align: center;
+        font-size: 64px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #d81b60;
+        opacity: 0;
+        z-index: 1;
+        text-shadow:
+            0 0 10px rgba(216,27,96,0.4),
+            0 0 30px rgba(216,27,96,0.3),
+            0 0 60px rgba(216,27,96,0.2);
+        transform: scale(0.8);
+    }
+
+    .show-text {
+        animation: romanticFade 2.5s ease forwards;
+    }
+
+    @keyframes romanticFade {
+        0% {
+            opacity: 0;
+            transform: scale(0.7);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* ❤️ BUTTON */
+    .next-btn {
+        margin-top: 25px;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 30px;
+        background: linear-gradient(45deg, #ff4081, #f50057);
+        color: white;
+        cursor: pointer;
+        opacity: 0;
+        box-shadow: 0 10px 25px rgba(245,0,87,0.4);
+        transition: transform 0.3s ease;
+    }
+
+    .next-btn:hover {
+        transform: scale(1.1);
+    }
+
+    /* Show button after blast */
+    .show-btn {
+        animation: buttonFade 1.5s ease forwards;
+    }
+
+    @keyframes buttonFade {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+<!-- BACKGROUND TEXT -->
+<div class="birthday-text" id="birthdayText">
+    Happiestt Birthdayyy Pyariiiii Sanam 😘
+</div>
+
+<!-- GIFT BOX + BUTTON -->
+<div class="box-container" id="giftBox">
+    <div class="lid"></div>
+
+    <div class="gift-box">
+        <div class="ribbon-v"></div>
+        <div class="ribbon-h"></div>
+        <div class="pop-origin" id="popOrigin"></div>
+    </div>
+
+    <!-- BUTTON UNDER BOX -->
+    <button class="next-btn" id="nextBtn" onclick="goNextPage()">
+        Move to next 💖
+    </button>
+
+    <script>
+        function goNextPage() {
+            window.location.href = "run.html";
+        }
+    </script>
+
+    <!-- <script>
+        function goNextPage() {
+            window.location.href = "index.html#page2";
+        }
+    </script> -->
+
+</div>
+
+<script>
+
+    // OPEN GIFT BOX FUNCTION
+
+   
+
+function openGift() {
+    const box = document.getElementById("giftBox");
+    const origin = document.getElementById("popOrigin");
+    const text = document.getElementById("birthdayText");
+    const btn = document.getElementById("nextBtn");
+
+    box.classList.add("open");
+
+    const flowers = ["🌸","🌹","🌼","🌺","🌻","💐","🌷","🥀"];
+
+    for (let i = 0; i < 40; i++) {
+        const flower = document.createElement("div");
+        flower.className = "flower";
+        flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+
+        flower.style.setProperty("--x", `${Math.random() * 600 - 300}px`);
+        flower.style.setProperty("--y", `${Math.random() * -450 - 80}px`);
+        flower.style.setProperty("--r", `${Math.random() * 720 - 360}deg`);
+
+        origin.appendChild(flower);
+    }
+
+    // SHOW TEXT
+    setTimeout(() => {
+        text.classList.add("show-text");
+    }, 1800);
+
+    // SHOW BUTTON
+    setTimeout(() => {
+        btn.classList.add("show-btn");
+    }, 2500);
+}
+
+// Redirect to Run/run.html
+function goNextPage() {
+    window.location.href = "run.html";
+}
+
+// CHANGE PAGE
+//function goNextPage() {
+//    window.location.href = "nextpage.html"; // 🔁 change this link
+//}
+
+// AUTO START AFTER 2 SECONDS
+setTimeout(openGift, 2000);
+</script>
+
+</body>
+</html>
